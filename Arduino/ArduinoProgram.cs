@@ -33,8 +33,8 @@ namespace Zelectro
             }
         }
 
-        public abstract void setup();
-        public abstract void loop();
+        public virtual void setup(){}
+        public virtual void loop(){}
 
         protected virtual void _loop()
         {
