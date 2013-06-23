@@ -19,6 +19,8 @@ namespace Zelectro
         protected ButtonState _state = ButtonState.UP;
         protected ButtonState _prev_state = ButtonState.UP;
 
+        public int Ticks { get; protected set; }
+
         public ButtonState State
         {
             get { return _state; }
@@ -43,11 +45,14 @@ namespace Zelectro
                         Release(this);
                 }
 
-                if(state == ButtonState.DOWN)
+                if (state == ButtonState.DOWN)
                 if (Down != null)
                     Down(this);
                 _state = state;
+                Ticks = 0;
             }
+            else
+                Ticks++;
         }
     }
 }
