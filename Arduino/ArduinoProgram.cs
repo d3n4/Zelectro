@@ -1,5 +1,6 @@
 using System;
 using System.Threading;
+using System.Collections.Generic;
 
 namespace Zelectro
 {
@@ -17,6 +18,8 @@ namespace Zelectro
                           LOW = 0x0;
 
         public bool Work = false;
+
+        public List<System.Action> OnLoop = new List<System.Action>();
 
         private Thread _thread = null;
 
@@ -41,7 +44,11 @@ namespace Zelectro
             while(true)
             {
                 if (Work)
+                {
                     loop();
+                    foreach (var loop_action in OnLoop)
+                        loop_action.Invoke();
+                }
                 Thread.Sleep(1);
             }
         }
