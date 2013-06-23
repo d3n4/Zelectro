@@ -86,7 +86,12 @@ namespace Zelectro
 
         public byte pull()
         {
-            return (byte)_serial.ReadByte();
+            try
+            {
+                return (byte)_serial.ReadByte();
+            } catch {
+            }
+            return 0x0;
         }
 
         public T pull<T>() where T : struct, IComparable, IConvertible, IFormattable
