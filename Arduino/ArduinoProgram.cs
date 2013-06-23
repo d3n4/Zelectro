@@ -19,7 +19,8 @@ namespace Zelectro
 
         public bool Work = false;
 
-        public List<System.Action> OnLoop = new List<System.Action>();
+        public delegate void LoopHandler(object sender);
+        public event LoopHandler Loop;
 
         private Thread _thread = null;
 
@@ -46,8 +47,7 @@ namespace Zelectro
                 if (Work)
                 {
                     loop();
-                    foreach (var loop_action in OnLoop)
-                        loop_action.Invoke();
+                    if(Loop != null) Loop(this);
                 }
                 Thread.Sleep(1);
             }

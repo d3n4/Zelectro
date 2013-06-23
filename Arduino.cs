@@ -8,11 +8,21 @@ namespace Zelectro
 {
     public class Arduino
     {
+        public enum ConnectionError
+        {
+            InvalidSoftware,
+            InvalidPlug,
+            None
+        }
+
         private static ArduinoProgram _program = null;
         protected string _name = "COM1";
         protected int _baud = 9600;
         protected SerialPort _serial;
         protected List<ArduinoProgram> _programs = new List<ArduinoProgram>();
+        protected ConnectionError _error = ConnectionError.None;
+
+        public ConnectionError Error { get { return _error; } }
 
         public static ArduinoProgram Context
         {
@@ -41,6 +51,7 @@ namespace Zelectro
 
         public bool Connect()
         {
+            _error = ConnectionError.None;
             try
             {
                 _serial = new SerialPort(_name, _baud);
@@ -61,9 +72,11 @@ namespace Zelectro
                         return true;
                     }
                 }
+                _error = ConnectionError.InvalidSoftware;
             }
             catch
             {
+                _error = ConnectionError.InvalidPlug;
                 if (_serial.IsOpen)
                     _serial.Close();
             }

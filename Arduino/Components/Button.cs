@@ -5,41 +5,47 @@ namespace Zelectro
 {
     public enum ButtonState
     {
-        Up = 0,
-        Down = 1
+        UP = 0,
+        DOWN = 1
     }
 
     public class Button : Component
     {
-        protected ButtonState _state = ButtonState.Up;
-        protected ButtonState _prev_state = ButtonState.Up;
+        public delegate void ButtonHandler(object sender);
+        public event ButtonHandler Click;
+        public event ButtonHandler Release;
+        public event ButtonHandler Down;
+
+        protected ButtonState _state = ButtonState.UP;
+        protected ButtonState _prev_state = ButtonState.UP;
 
         public ButtonState State
         {
             get { return _state; }
         }
 
-        public List<System.Action> OnDown = new List<System.Action>();
-        public List<System.Action> OnClick = new List<System.Action>();
-
         public Button(Pin pin) : base(pin)
         {
             _context.pinMode(pin, IOType.Input);
-            _context.OnLoop.Add(Click);
+            _context.Loop += loop;
         }
 
-        protected virtual void Click()
+        protected void loop (object sender)
         {
             var state = (ButtonState)_context.digitalRead(_pin);
             if (state != _state)
             {
-                if (state == ButtonState.Up)
-                    foreach (var e in OnClick)
-                        e.Invoke();
+                if (state == ButtonState.UP)
+                {
+                    if (Click != null)
+                        Click(this);
+                    if (Release != null)
+                        Release(this);
+                }
 
-                if (state == ButtonState.Down)
-                    foreach (var e in OnDown)
-                        e.Invoke();
+                if(state == ButtonState.DOWN)
+                if (Down != null)
+                    Down(this);
                 _state = state;
             }
         }
