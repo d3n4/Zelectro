@@ -39,7 +39,7 @@ namespace Zelectro
         public virtual void setup(){}
         public virtual void loop(){}
 
-        protected virtual void _loop()
+        private void _loop()
         {
             while(true)
             {

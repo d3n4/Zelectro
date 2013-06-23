@@ -4,7 +4,7 @@ namespace Zelectro
 {
     public abstract class Component
     {
-        protected ArduinoProgram _context = Arduino.context;
+        protected ArduinoProgram _context = Arduino.Context;
         protected Pin _pin;
 
         public ArduinoProgram context

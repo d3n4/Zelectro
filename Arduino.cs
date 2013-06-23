@@ -14,7 +14,7 @@ namespace Zelectro
         protected SerialPort _serial;
         protected List<ArduinoProgram> _programs = new List<ArduinoProgram>();
 
-        public static ArduinoProgram context
+        public static ArduinoProgram Context
         {
             get { return _program; }
         }
@@ -27,6 +27,11 @@ namespace Zelectro
         {
             _name = Port;
             _baud = Baud;
+        }
+
+        public T GetContext<T>() where T : ArduinoProgram
+        {
+            return (T)_program;
         }
 
         public void AddProgram<T>() where T : ArduinoProgram, new()
