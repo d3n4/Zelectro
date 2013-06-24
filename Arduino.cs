@@ -18,7 +18,7 @@ namespace Zelectro
         private static ArduinoProgram _program = null;
         protected string _name = "COM1";
         protected int _baud = 9600;
-        protected SerialPort _serial;
+        protected SerialPort _serial = null;
         protected List<ArduinoProgram> _programs = new List<ArduinoProgram>();
         protected ConnectionError _error = ConnectionError.None;
 
@@ -54,7 +54,8 @@ namespace Zelectro
             _error = ConnectionError.None;
             try
             {
-                _serial = new SerialPort(_name, _baud);
+                if(_serial == null)
+                    _serial = new SerialPort(_name, _baud);
                 _serial.Open();
                 while(!_serial.IsOpen);
                 _serial.Close();
